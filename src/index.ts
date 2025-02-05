@@ -1,6 +1,6 @@
 import { loadTasks, saveTasks } from './memoryStorage';
 import * as readlineSync from 'readline-sync';
-import { Task, Priority } from './types';
+import { Task, Priority, BaseTask, isMainTask } from './types';
 
 
 let tasks = loadTasks();
@@ -41,12 +41,18 @@ function addTask(): void {
 
 function completeTask(): void {
     showTasks();
-    const id = readlineSync.questionInt("\nWelche Aufgabe wurde erledigt? (ID eingeben): ");
-    const task = tasks.find(t => t.id === id.toString());
+    const id = readlineSync.question("\nWelche Aufgabe wurde erledigt? (ID eingeben): ");
+    const task = tasks.find(t => t.id === id) as BaseTask;
+    
     if (task) {
         task.completed = true;
+        if (isMainTask(task)) {
+            task.subtasks?.forEach(sub => sub.completed = true);
+            console.log(`🎉 Hauptaufgabe "${task.title}" und Unteraufgaben erledigt!`);
+        } else {
+            console.log(`🎉 Unteraufgabe "${task.title}" als erledigt markiert!`);
+        }
         saveTasks(tasks);
-        console.log(`🎉 Aufgabe "${task.title}" als erledigt markiert!`);
     } else {
         console.log("❌ Keine Aufgabe mit dieser ID gefunden.");
     }

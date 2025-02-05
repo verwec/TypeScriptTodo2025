@@ -22,3 +22,12 @@ export interface SubTask extends BaseTask {
 // Funktionstypen für Storage
 export type TaskLoader = () => Task[];
 export type TaskSaver = (tasks: Task[]) => void;
+
+// Type Guards
+export function isSubTask(task: BaseTask): task is SubTask {
+    return 'parentId' in task;
+}
+
+export function isMainTask(task: BaseTask): task is Task {
+    return 'subtasks' in task;
+}
