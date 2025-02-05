@@ -1,12 +1,12 @@
 import { loadTasks, saveTasks } from './memoryStorage';
 import * as readlineSync from 'readline-sync';
-import { Task } from './types';
+import { Task, Priority } from './types';
 
 
 let tasks = loadTasks();
 
 function showTasks(): void {
-    console.log("\n📝 Deine Aufgaben:");
+    console.log("\n📝 Alle Aufgaben:");
     tasks.forEach(task => {
         const priorityEmoji = {
             niedrig: "⬇️",
@@ -32,7 +32,7 @@ function addTask(): void {
         id: (tasks.length + 1).toString(),
         title,
         completed: false,
-        priority: "mittel"
+        priority: Priority.MITTEL
     };
     tasks.push(newTask);
     saveTasks(tasks);
