@@ -1,10 +1,5 @@
 import * as fs from 'fs';
-
-interface Task {
-    id: string;
-    title: string;
-    completed: boolean;
-}
+import { Task, Priority } from './types';
 
 const STORAGE_FILE = 'tasks.json';
 

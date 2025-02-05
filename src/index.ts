@@ -7,7 +7,17 @@ let tasks = loadTasks();
 
 function showTasks(): void {
     console.log("\n📝 Deine Aufgaben:");
-    tasks.forEach(task => console.log(`[${task.id}] [${task.completed ? "✅" : "❌"}] ${task.title}`));
+    tasks.forEach(task => {
+        const priorityEmoji = {
+            niedrig: "⬇️",
+            mittel: "➡️",
+            hoch: "⬆️"
+        }[task.priority];
+        
+        console.log(
+            `[${task.id}] [${task.completed ? "✅" : "❌"}] ${priorityEmoji} ${task.title}`
+        );
+    });
 }
 
 function addTask(): void {
@@ -15,7 +25,8 @@ function addTask(): void {
     const newTask: Task = {
         id: (tasks.length + 1).toString(),
         title,
-        completed: false
+        completed: false,
+        priority: "mittel"
     };
     tasks.push(newTask);
     saveTasks(tasks);
