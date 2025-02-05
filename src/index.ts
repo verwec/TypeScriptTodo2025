@@ -14,9 +14,15 @@ function showTasks(): void {
             hoch: "⬆️"
         }[task.priority];
         
-        console.log(
-            `[${task.id}] [${task.completed ? "✅" : "❌"}] ${priorityEmoji} ${task.title}`
-        );
+        console.log(`[${task.id}] [${task.completed ? "✅" : "❌"}] ${priorityEmoji} ${task.title}`);
+        task.subtasks?.forEach(subtask => {
+            const subPriorityEmoji = {
+                niedrig: "⬇️",
+                mittel: "➡️",
+                hoch: "⬆️"
+            }[subtask.priority];
+            console.log(`  └─ [${subtask.id}] [${subtask.completed ? "✅" : "❌"}] ${subPriorityEmoji} ${subtask.title}`);
+        });
     });
 }
 
@@ -35,15 +41,29 @@ function addTask(): void {
 
 function completeTask(): void {
     showTasks();
-    const id = readlineSync.questionInt("\nWelche Aufgabe wurde erledigt? (ID eingeben): ");
-    const task = tasks.find(t => t.id === id.toString());
+    const id = readlineSync.question("\nWelche Aufgabe wurde erledigt? (ID eingeben): ");
+    
+    // Suche in Hauptaufgaben
+    const task = tasks.find(t => t.id === id);
     if (task) {
         task.completed = true;
         saveTasks(tasks);
         console.log(`🎉 Aufgabe "${task.title}" als erledigt markiert!`);
-    } else {
-        console.log("❌ Keine Aufgabe mit dieser ID gefunden.");
+        return;
     }
+
+    // Suche in Subtasks
+    for (const mainTask of tasks) {
+        const subtask = mainTask.subtasks?.find(st => st.id === id);
+        if (subtask) {
+            subtask.completed = true;
+            saveTasks(tasks);
+            console.log(`🎉 Unteraufgabe "${subtask.title}" als erledigt markiert!`);
+            return;
+        }
+    }
+
+    console.log("❌ Keine Aufgabe mit dieser ID gefunden.");
 }
 
 function mainMenu(): void {

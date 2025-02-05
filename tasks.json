@@ -1,7 +1,22 @@
 [
   {
     "id": "1",
-    "title": "1 Glas Wasser trinken",
-    "completed": false
+    "title": "Typescript-Kurs vorbereiten",
+    "completed": true,
+    "priority": "hoch",
+    "subtasks": [
+      {
+        "id": "1-1",
+        "title": "Codebeispiele vorbereiten",
+        "completed": false,
+        "priority": "mittel"
+      },
+      {
+        "id": "1-2",
+        "title": "Folien erstellen",
+        "completed": true,
+        "priority": "mittel"
+      }
+    ]
   }
 ]
